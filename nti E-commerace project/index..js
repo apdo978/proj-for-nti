@@ -2,6 +2,7 @@ let apillink = "https://fakestoreapi.com/products"
 arrData = []
 arrPrice = []
 const optArr = []
+const class1 = document.getElementsByClassName(`Card`) 
 
 // getting the products from the api 
  const req =fetch(apillink).then(res => {
@@ -9,7 +10,7 @@ const optArr = []
     return mydata
 }) // saving the products inside mydata []
     .then(mydata => {
-        console.log(mydata)
+        // console.log(mydata)
         //iterate on the datat
         mydata.map((e, i) => {
 
@@ -28,7 +29,7 @@ const optArr = []
             const contBtnVie = document.createElement("button") //view product
 
             //bootstrap coloring
-            contBtnVie.className = "btn btn-dark"
+            contBtnVie.className = "btn btn-dark two"
             contBtnVie.textContent = "View Product" //the text insede the button 
 
             contpara4.className = `proPrice ${i}`
@@ -47,7 +48,7 @@ const optArr = []
             })
 
             //bootstrap coloring for the secound button
-            contBtn.className = "btn btn-dark"
+            contBtn.className = "btn btn-dark one"
             contBtn.textContent = "Add To Cart"
 
             contBtn.addEventListener("click", () => {
@@ -57,12 +58,12 @@ const optArr = []
                     arrData.push(i) // arr that holding indexes of the elements which in the carts
                     arrPrice.push(mydata[arrData.slice(-1)[0]].price)
                     const timespur = arrData.filter((e) => e == i).length;//returnning a new array which length equal to time of pruches (times of i in the array)
-                    document.getElementById(`cart${i}`).textContent = "  Q" + timespur
+                    document.getElementById(`cart${i}`).textContent = "  x" + timespur
                 }
 
                 else {
                     arrData.push(i) // starts here when u click add to cart for the first time
-                    console.log(arrData)
+                    // console.log(arrData)
                     
                     // creating elements to show what is inside the cart
                     const conttitle = document.createElement("p")
@@ -81,15 +82,15 @@ const optArr = []
                             arrData.includes(i)?arrData.splice(index, 1):null
                             arrPrice.splice(index, 1)
                             let sum = arrPrice.reduce((acc, c) => acc + c, 0) 
-                            arrPrice.length >0?document.getElementById("total").textContent = sum.toFixed(1):document.getElementById("total").textContent=""
+                            arrPrice.length >0?document.getElementById("total").textContent = "ToTal: "+sum.toFixed(1)+"$":document.getElementById("total").textContent=""
 
-                        console.log(arrPrice)
-                        console.log(i)
+                        // console.log(arrPrice)
+                        // console.log(i)
                         const timespur = arrData.filter((e) => e == i).length;
-                        document.getElementById(`cart${i}`).textContent = "  Q" + timespur
+                        document.getElementById(`cart${i}`).textContent = "  x" + timespur
                         if(!arrData.includes(i)){
                             document.querySelector(`.pro${i}`).remove()
-                            console.log("deleted" + i)
+                            // console.log("deleted" + i)
                         }
                     
                     })
@@ -111,13 +112,13 @@ const optArr = []
                     div.appendChild(contImge)
                     div.appendChild(removCartBtn)
                     document.getElementById("cart").appendChild(div)
-
+console.log(  document.getElementById("cart"))
 
                     arrPrice.push(mydata[arrData.slice(-1)[0]].price)//another array to holds price values only
                 }
 
                 let sum = arrPrice.reduce((acc, c) => acc + c, 0) 
-                document.getElementById("total").textContent = sum.toFixed(1)
+                document.getElementById("total").textContent = "ToTal: " + sum.toFixed(1) +"$"
 
             } //end of the button function
         )//  end of the button event
@@ -127,7 +128,7 @@ const optArr = []
             contImge.src = e.image
             contpara.textContent = e.category
             contpara2.textContent = e.description
-            contpara3.textContent = "Rating Count  " + e.rating.count
+            contpara3.textContent =   e.rating.count + " Purchase"
             contpara4.textContent = "Price  " + e.price
 
             div.appendChild(conttitle)
@@ -142,27 +143,55 @@ const optArr = []
             
             !optArr.includes(e.category)&&optArr.push(e.category)
         })
+        document.getElementById("Cat").addEventListener("change",(e)=>{
+            const class1 = document.getElementsByClassName(`Card`) 
+            if(e.target.value == "all"){
+                for(let i = 0 ;i<class1.length;i++){
+                    class1[i].style.display = "flex";
+                 }
+            }
+            else{
+            const class2 = document.getElementsByClassName(`${e.target.value}`) 
+            // console.log(e.target.value)
+            for(let i = 0 ;i<class1.length;i++){
+               class1[i].style.display = "none";
+            }
+            for(let i = 0 ;i<class2.length;i++){
+                class2[i].style.display = "flex"
+            }}
+            
+        })
+
         optArr.forEach((ele,i)=>{
             const opt = document.createElement("option") 
             opt.className = `opt${i}`
-            opt.addEventListener("click",()=>{
-                console.log(ele)
-                const class1 = document.getElementsByClassName(`Card`) 
-                const class2 = document.getElementsByClassName(`${ele}`) 
-                console.log(class1)
-                for(let i = 0 ;i<class1.length;i++){
-                    class1[i].style.display = "none";
-                }
-                for(let i = 0;i<class2.length;i++ ){
-                 class2[i].style.display= "flex"
-                console.log("looped" )}
-            })
             opt.textContent = ele
             document.getElementById("Cat").appendChild(opt)
         })
-            console.log(optArr)
-
+        return mydata
+    }).then((mydata)=>{
+    
+        for(let i = 0 ; i < Math.ceil(mydata.length/6);i++){
+    const pageBtn = document.createElement("button")
+    pageBtn.textContent = i+1
+    pageBtn.id = `page ${i}`
+    pageBtn.className = `page ${i}`
+    pageBtn.addEventListener("click",(e)=>{
+         const i2 =  e.target.id[5] 
+         const len = (+i2+1)*6<mydata.length?(+i2+1)*6:mydata.length
+        //  console.log(length)
+        for(let l = 0 ; l<class1.length;l++){
+            class1[l].style.display = "none";
+        }
+        for(let l = i2*6 ;l<len;l++){
+            class1[l].style.display = "flex";
+            // console.log(l)
+        }
     })
+    document.getElementById("HeroSection").appendChild(pageBtn)}
+    
+    document.getElementById("page 0").click()   
+})
     
 document.querySelector("option").addEventListener("click",()=>{
     const class1 = document.getElementsByClassName(`Card`) 
@@ -187,7 +216,7 @@ else{
 
     for(let i = 0;i<class1.length;i++){
         parseInt(document.getElementsByClassName("proPrice")[i].textContent.split(" ")[2])<= e.target.value?class1[i].style.display = "flex":null
-    console.log("d")
+    // console.log("d")
     }
 
 }
@@ -213,5 +242,36 @@ document.querySelector(".search").addEventListener("input",(e)=>{
                 
             }
         }
-    console.log("apdo is on the House");
-})
+     
+    }
+)
+
+// for(){}
+// document.createElement("div")
+// document.createElement("button")
+// document.createElement("div")
+    // for(let i = 0 ;i<() /6;i++){
+    //     console.log(i+1)
+    // }
+
+    console.log("????بتطلع اي بتطلع اي ياعم انت")
+    console.log("#".repeat(5));
+    console.log("apdo is in the House");
+    console.log(`
+               :*#*:                :*#*:
+             :%@@@@@#.            .#@@@@@%.
+            *@@@@@@@@@*.        .*@@@@@@@=+=
+          *@@@@@@@@@@@@@*      *@@@@@@@=.=+++-
+        =@@@@@@@=.+@@@@@@@=  =@@@@@@@+  +++++++:
+      =@@@@@@@*.    *@@@%: =@@@@@@@*.    -+++++++:
+    :@@@@@@@#.       .#- :@@@@@@@%.       .=++++++=.
+    %@@@@@%:           .%@@@@@@%.           .=+++++=
+    :@@@@@@@#.       .#@@@@@@@:            =+++++++.
+      =@@@@@@@*     *@@@@@@@=            -+++++++:
+        +@@@@@@@  +@@@@@@@+            :+++++++-
+          *@@@@:=@@@@@@@*            :+++++++=
+           .#@=@@@@@@@#.            =++++++=
+             :%@@@@@%:             .+++++=.
+               :*%*:                .-==.`);
+
+    console.log("#".repeat(5));
