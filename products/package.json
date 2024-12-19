@@ -1,0 +1,17 @@
+{
+  "name": "products-nti",
+  "version": "1.0.0",
+  "description": "simple product manager for JSON files",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "[\"product\"",
+    "\"manager\"",
+    "\"JSON\"",
+    "\"file\"]"
+  ],
+  "author": "Dr.AbdElrhman",
+  "license": "ISC"
+}
